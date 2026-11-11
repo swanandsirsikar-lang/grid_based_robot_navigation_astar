@@ -3,6 +3,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct
 {
     CellType_t cells[GRID_ROWS][GRID_COLS];
@@ -40,5 +44,9 @@ Status_t inflateObstacles(
 );
 
 Status_t validateRobot(const Robot_t *robot);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
