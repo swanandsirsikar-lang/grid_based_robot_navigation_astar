@@ -51,7 +51,7 @@ APP_SOURCES = \
     $(SOURCE_DIR)/grid.c \
     $(SOURCE_DIR)/validation.c \
     $(SOURCE_DIR)/astar.c \
-    $(SOURCE_DIR)/file_handler.c \
+    $(SOURCE_DIR)/filehandler.c \
     $(SOURCE_DIR)/report.c
 
 APP_OBJECTS = $(patsubst \
