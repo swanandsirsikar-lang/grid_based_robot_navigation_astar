@@ -5,7 +5,7 @@
 #include "grid.h"
 #include "validation.h"
 #include "astar.h"
-#include "file_handler.h"
+#include "filehandler.h"
 #include "report.h"
 
 /*
