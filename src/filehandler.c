@@ -1,13 +1,17 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stddef.h>
 
 #include "file_handler.h"
 
 /*
- * Load a 100 x 100 occupancy grid.
+ * Load an occupancy grid from a text file.
  *
- * 0 represents free space.
- * 1 represents an obstacle.
+ * The file must contain exactly 100 x 100 values.
+ * 0 = free cell.
+ * 1 = obstacle cell.
+ *
+ * Additional non-whitespace content is rejected.
  */
 Status_t loadGridFromFile(
     const char *filename,
@@ -19,6 +23,7 @@ Status_t loadGridFromFile(
     int x;
     int y;
     int value;
+    int character;
 
     if (filename == NULL || grid == NULL)
     {
@@ -49,12 +54,17 @@ Status_t loadGridFromFile(
         }
     }
 
-    /* Reject additional numeric data after the grid. */
-    if (fscanf(file, "%d", &value) == 1)
+    /*
+     * After reading the expected grid, allow whitespace only.
+     */
+    while ((character = fgetc(file)) != EOF)
     {
-        (void)fclose(file);
+        if (!isspace((unsigned char)character))
+        {
+            (void)fclose(file);
 
-        return STATUS_INVALID_MAP;
+            return STATUS_INVALID_MAP;
+        }
     }
 
     if (ferror(file))
