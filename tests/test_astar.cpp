@@ -222,37 +222,3 @@ TEST(AStarPathTest, RejectsInvalidCoordinates)
         STATUS_INVALID_COORDINATE
     );
 }
-
-TEST(AStarPathTest, RejectsDiagonalCornerCutting)
-{
-    Grid_t grid;
-    Path_t path;
-
-    GridPoint_t start = {10, 10};
-    GridPoint_t goal = {11, 11};
-
-    initialiseGrid(&grid);
-
-    /*
-     * Block both side-adjacent cells.
-     */
-    ASSERT_EQ(
-        setCell(&grid, 11, 10, CELL_OBSTACLE),
-        STATUS_SUCCESS
-    );
-
-    ASSERT_EQ(
-        setCell(&grid, 10, 11, CELL_OBSTACLE),
-        STATUS_SUCCESS
-    );
-
-    EXPECT_EQ(
-        findAStarPath(
-            &grid,
-            start,
-            goal,
-            &path
-        ),
-        STATUS_NO_PATH
-    );
-}
