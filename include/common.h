@@ -1,6 +1,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GRID_ROWS 100
 #define GRID_COLS 100
 
@@ -45,5 +49,9 @@ typedef struct
 } GridPoint_t;
 
 const char *statusToString(Status_t status);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
