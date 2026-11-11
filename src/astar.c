@@ -233,6 +233,11 @@ static Status_t reconstructPath(
         reverse_path[count++] = current;
 
         current = came_from[current];
+
+        if (current < 0 || current >= GRID_CELL_COUNT)
+        {
+            return STATUS_NO_PATH;
+        }
     }
 
     reverse_path[count++] = start_index;
