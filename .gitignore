@@ -1,1 +1,25 @@
+# Object files
+*.o
 
+# Executable files
+*.out
+*.exe
+/grid_astar
+
+# Build directory
+/build/
+
+# Generated navigation reports
+/output/*.txt
+!/output/.gitkeep
+
+# Editor temporary files
+*~
+*.swp
+
+# IDE configuration
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
