@@ -105,8 +105,16 @@ Status_t validateRobot(const Robot_t *robot)
  *
  * Effective radius = robot radius + safety clearance.
  *
- * The source grid is preserved; inflation is written into
- * a separate destination grid.
+ * The grid boundary is also treated as a restricted region.
+ *
+ * Parameters:
+ * source   : Original occupancy grid.
+ * inflated : Destination grid after obstacle inflation.
+ * robot    : Robot dimensions and safety clearance.
+ *
+ * Returns:
+ * STATUS_SUCCESS          if inflation is successful.
+ * STATUS_INVALID_ARGUMENT if any input is invalid.
  */
 Status_t inflateObstacles(
     const Grid_t *source,
@@ -119,17 +127,15 @@ Status_t inflateObstacles(
     int obstacle_x;
     int obstacle_y;
 
+    int search_radius;
+
     double radius;
     double radius_squared;
 
     if (source == NULL ||
         inflated == NULL ||
-        source == inflated)
-    {
-        return STATUS_INVALID_ARGUMENT;
-    }
-
-    if (validateRobot(robot) != STATUS_SUCCESS)
+        source == inflated ||
+        validateRobot(robot) != STATUS_SUCCESS)
     {
         return STATUS_INVALID_ARGUMENT;
     }
@@ -142,6 +148,35 @@ Status_t inflateObstacles(
 
     radius_squared = radius * radius;
 
+    /*
+     * Calculate the maximum integer offset required
+     * to inspect the circular inflation region.
+     */
+    search_radius = (int)ceil(radius);
+
+    /*
+     * Restrict robot centre positions near the map boundary.
+     */
+    for (y = 0; y < GRID_ROWS; y++)
+    {
+        for (x = 0; x < GRID_COLS; x++)
+        {
+            if ((double)x < radius ||
+                (double)x > (double)(GRID_COLS - 1) - radius ||
+                (double)y < radius ||
+                (double)y > (double)(GRID_ROWS - 1) - radius)
+            {
+                inflated->cells[y][x] = CELL_INFLATED;
+            }
+        }
+    }
+
+    /*
+     * Inflate every original obstacle.
+     *
+     * Only inspect cells inside the obstacle's local
+     * bounding region instead of scanning the whole map.
+     */
     for (obstacle_y = 0;
          obstacle_y < GRID_ROWS;
          obstacle_y++)
@@ -156,14 +191,27 @@ Status_t inflateObstacles(
                 continue;
             }
 
-            for (y = 0; y < GRID_ROWS; y++)
+            for (y = obstacle_y - search_radius;
+                 y <= obstacle_y + search_radius;
+                 y++)
             {
-                for (x = 0; x < GRID_COLS; x++)
+                for (x = obstacle_x - search_radius;
+                     x <= obstacle_x + search_radius;
+                     x++)
                 {
-                    double dx = (double)(x - obstacle_x);
-                    double dy = (double)(y - obstacle_y);
+                    double dx;
+                    double dy;
+                    double distance_squared;
 
-                    double distance_squared =
+                    if (!isCoordinateValid(x, y))
+                    {
+                        continue;
+                    }
+
+                    dx = (double)(x - obstacle_x);
+                    dy = (double)(y - obstacle_y);
+
+                    distance_squared =
                         (dx * dx) + (dy * dy);
 
                     if (distance_squared <= radius_squared)
