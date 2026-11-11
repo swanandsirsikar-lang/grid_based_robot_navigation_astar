@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stddef.h>
 
-#include "file_handler.h"
+#include "filehandler.h"
 
 /*
  * Load an occupancy grid from a text file.
