@@ -3,6 +3,10 @@
 
 #include "grid.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct
 {
     GridPoint_t points[GRID_CELL_COUNT];
@@ -26,5 +30,9 @@ double calculateOctileHeuristic(
     GridPoint_t from,
     GridPoint_t to
 );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
