@@ -9,9 +9,9 @@
 #include "report.h"
 
 /*
- * Read and validate one coordinate pair from the user.
+ * Read and validate a coordinate pair.
  *
- * Input format: x y
+ * Expected input format: x y
  */
 static Status_t readCoordinate(
     const char *prompt,
@@ -19,6 +19,9 @@ static Status_t readCoordinate(
 )
 {
     char line[64];
+
+    char *separator;
+    char *second_value;
 
     int x;
     int y;
@@ -30,8 +33,32 @@ static Status_t readCoordinate(
 
     printf("%s", prompt);
 
-    if (fgets(line, sizeof(line), stdin) == NULL ||
-        sscanf(line, "%d %d", &x, &y) != 2)
+    if (fgets(line, sizeof(line), stdin) == NULL)
+    {
+        return STATUS_INVALID_ARGUMENT;
+    }
+
+    separator = line;
+
+    while (*separator != '\0' &&
+           *separator != ' ' &&
+           *separator != '\t' &&
+           *separator != '\n')
+    {
+        separator++;
+    }
+
+    if (*separator == '\0' || *separator == '\n')
+    {
+        return STATUS_INVALID_ARGUMENT;
+    }
+
+    *separator = '\0';
+
+    second_value = separator + 1;
+
+    if (parseInteger(line, &x) != STATUS_SUCCESS ||
+        parseInteger(second_value, &y) != STATUS_SUCCESS)
     {
         return STATUS_INVALID_ARGUMENT;
     }
@@ -41,7 +68,6 @@ static Status_t readCoordinate(
 
     return validatePoint(*point);
 }
-
 /* Main application entry point. */
 int main(void)
 {
