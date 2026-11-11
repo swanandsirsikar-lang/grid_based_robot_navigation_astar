@@ -4,6 +4,7 @@
 #include <ctype.h>
 
 #include "validation.h"
+#include "grid.h"
 
 /* Validate one grid coordinate. */
 Status_t validatePoint(GridPoint_t point)
