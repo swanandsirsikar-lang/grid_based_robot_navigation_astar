@@ -1,1 +1,2 @@
-
+# This file ensures that the output directory is tracked by Git.
+# Generated navigation reports are stored in this directory.
