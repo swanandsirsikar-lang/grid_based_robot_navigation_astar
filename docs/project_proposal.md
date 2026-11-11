@@ -4,9 +4,9 @@
 
 - **Project Title:** Grid-Based Autonomous Robot Navigation and Shortest Path Planning System Using A* Algorithm
 - **Domain:** Embedded Systems / Robotics
-- **Student Name:** [Your Name]
-- **Roll Number:** [Your Roll Number]
-- **Division / Batch:** [Your Division and Batch]
+- **Student Name:** Swanand Sirsikar
+- **Roll Number:** 612505157
+- **Division / Batch:** Batch 2
 - **Repository Name:** grid_based_robot_navigation_astar
 - **GitHub Repository:** https://github.com/swanandsirsikar-lang/grid_based_robot_navigation_astar
 
